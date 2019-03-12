@@ -1,0 +1,39 @@
+{
+  "name": "ang-vagabondserver",
+  "version": "1.0.0",
+  "description": "Server for Vagabond Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/randyshur/vagabondServer.git"
+  },
+  "keywords": [
+    "states",
+    "travel",
+    "landmarks"
+  ],
+  "author": "StringSeekers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/randyshur/vagabondServer/issues"
+  },
+  "homepage": "https://github.com/randyshur/vagabondServer#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.4",
+    "body-parser": "^1.18.3",
+    "chalk": "^2.4.2",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.10",
+    "pg": "^7.8.0",
+    "sequelize": "^4.42.0",
+    "sequelize-cli": "^5.4.0"
+  }
+}
