@@ -69,6 +69,13 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ error: err }))
 });
 
+// Get single user by id for updating
+router.get('/id/:id', (req, res) => {
+  User.findOne({where: {id: req.params.id}})
+  .then(user => res.status(200).json(user))
+  .catch(err => res.status(500).json(err))
+});
+
 // Update Users
 router.put('/:id', (req, res) => {
   if (!req.errors) {
