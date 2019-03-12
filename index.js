@@ -5,15 +5,15 @@ const app = express();
 const sequelize = require('./db');
 const bodyParser = require('body-parser');
 
-// Need controllers
-// ex: const user = require('./controllers/usercontroller');
+// Need controllers nere
+const user = require('./controllers/usercontroller');
 
 sequelize.sync();
 app.use(bodyParser.json());
 app.use(require('./middleware/headers'));
 
 // Need api calls here 
-// ex: app.use('/api/user', user)
+app.use('/api/user', user)
 
 app.get('/', (req, res) => res.sendfile('index.html'));
 
