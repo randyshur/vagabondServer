@@ -44,12 +44,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         latitude: {
             type: DataTypes.DECIMAL,
-            allowNull: false,
+            allowNull: true,
             unique: true
         },
         longitude: {
             type: DataTypes.DECIMAL,
-            allowNull: false,
+            allowNull: true,
             unique: true
         },
         admin: {
