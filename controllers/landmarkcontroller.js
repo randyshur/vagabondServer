@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const User = require('../db').import('../models/user');
 const State = require('../db').import('../models/state');
 const Landmark = require('../db').import('../models/landmark');
+State.belongsTo(User);
 Landmark.belongsTo(State);
 
 // Create Landmark
@@ -33,7 +35,18 @@ router.post('/', (req, res) => {
 
 // Get all landmarks
 router.get('/', (req, res) => {
-  Landmark.findAll()
+  Landmark.findAll({ 
+    include: [
+      {
+        model: State,
+        include: [
+          {
+            model: User
+          }
+        ]
+      }
+    ]
+  })
     .then(landmarks => res.status(200).json(landmarks))
     .catch(err => res.status(500).json({ error: err }))
 });
@@ -41,10 +54,19 @@ router.get('/', (req, res) => {
 // Get all user landmarks
 router.get('/user/:userId', (req, res) => {
   Landmark.findAll({ 
-    include: [{
-    model: State,
-    where: {userId: req.params.userId}
-   }]
+    include: [
+      {
+        model: State,
+        where: {userId: req.params.userId},
+        include: [
+          {
+            model: User,
+            
+          }
+        ],
+        
+      }
+    ]
   })
     .then(landmarks => res.status(200).json(landmarks))
     .catch(err => res.status(500).json({ error: err }))
