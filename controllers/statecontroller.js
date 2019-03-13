@@ -42,6 +42,11 @@ router.get('/id/:id', (req, res) => {
 });
 
 // TODO search to validate is userid-state combination exists
+router.get('/validate/:state/:userId', function(req, res) {
+  State.findAll({where: {state: req.params.state, userId: req.params.userId}})
+  .then(state => res.status(200).json(state))
+  .catch(err => res.status(500).json(err))
+});
 
 // Get unique states for dropdowns
 router.get('/unique', (req, res) => {
