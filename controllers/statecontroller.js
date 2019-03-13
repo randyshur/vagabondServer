@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
     state: req.body.state.state,
     dateLastVisited: req.body.state.dateLastVisited,
     comments: req.body.state.comments,
-    userId: req.body.state.userId,
+    userId: req.body.state.userId, //req.params??
 
   })
     .then(
