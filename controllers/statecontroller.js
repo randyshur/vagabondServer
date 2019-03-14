@@ -34,6 +34,15 @@ router.get('/', (req, res) => {
     .catch(err => res.status(500).json({ error: err }))
 });
 
+//get all user states
+router.get('/:userId', (req, res) => {
+  State.findAll({
+    where: {userId: req.params.userId}
+  })
+  .then(states => res.status(200).json(states))
+  .catch(err => res.status(500).json({ error: err }))
+})
+
 // Get single states by id for updating
 router.get('/id/:id', (req, res) => {
   State.findOne({where: {id: req.params.id}})
