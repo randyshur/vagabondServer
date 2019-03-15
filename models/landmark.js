@@ -36,6 +36,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        owner: {
+            type: DataTypes.INTEGER
+        }
     })
 
     return Landmark;

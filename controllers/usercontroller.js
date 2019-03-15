@@ -8,17 +8,17 @@ const jwt = require('jsonwebtoken');
 router.post('/signup', (req, res) => {
 
   User.create({
-    username: req.body.user.username,
-    password: bcrypt.hashSync(req.body.user.password, 10),
-    firstName: req.body.user.firstName,
-    lastName: req.body.user.lastName,
-    email: req.body.user.email,
-    address: req.body.user.address,
-    city: req.body.user.city,
-    state: req.body.user.state,
-    zip: req.body.user.zip,
-    latitude: req.body.user.latitude,
-    longitude: req.body.user.longitude
+    username: req.body.username,
+    password: bcrypt.hashSync(req.body.password, 10),
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+    address: req.body.address,
+    city: req.body.city,
+    state: req.body.state,
+    zip: req.body.zip,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude
   })
     .then(
       createSuccess = (user) => {

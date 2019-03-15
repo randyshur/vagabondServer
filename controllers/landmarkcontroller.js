@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const State = require('../db').import('../models/state');
 const Landmark = require('../db').import('../models/landmark');
+// Landmark.sync({force:true})
+
 State.belongsTo(User);
 Landmark.belongsTo(State);
 
@@ -19,6 +21,7 @@ router.post('/', (req, res) => {
     imageURL: req.body.landmark.imageURL,
     comments: req.body.landmark.comments,
     stateId: req.body.landmark.stateId,
+    // owner: req.user.id
   })
     .then(
       createSuccess = (landmark) => {
@@ -52,12 +55,12 @@ router.get('/', (req, res) => {
 });
 
 // Get all user landmarks
-router.get('/user/:userId', (req, res) => {
+router.get('/user/', (req, res) => {
   Landmark.findAll({ 
     include: [
       {
         model: State,
-        where: {userId: req.params.userId},
+        where: {owner: req.user.id},
         include: [
           {
             model: User,

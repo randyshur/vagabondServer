@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const State = require('../db').import('../models/state');
+
+// State.sync({force:true})
 State.belongsTo(User);
 
 
