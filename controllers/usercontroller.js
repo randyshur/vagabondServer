@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const validateSession = require('../middleware/validate-session')
 
 // Sign up a new user
 router.post('/signup', (req, res) => {
@@ -62,12 +63,43 @@ router.post('/signin', function (req, res) {
 })
 
 // Get all users
-router.get('/', (req, res) => {
+router.get('/',  (req, res) => {
   User.findAll()
     .then(users => res.status(200).json(users))
     .catch(err => res.status(500).json({ error: err }))
 });
 
+// The following endpoints only allow owner to use
+router.get('/mine', validateSession, (req, res) => {
+  console.log('------------here' + req.token)
+  User.findOne({where: {id: req.user.id}})
+  .then(user => res.status(200).json(user))
+  .catch(err => res.status(500).json(err))
+});
+
+// Update users data
+router.put('/mine/', validateSession, (req, res) => {
+  if (!req.errors) {
+    User.update(req.body, { where: { id: req.user.id }})
+      .then(user => res.status(200).json(user))
+      .catch(err => res.json(err))
+  } else {
+    res.status(500).json(req.errors)
+  }
+})
+
+// Delete users data
+router.delete('/mine', validateSession, (req, res) => {
+  if (!req.errors) {
+    User.destroy({ where: { id: req.user.id }})
+      .then(user => res.status(200).json(user))
+      .catch(err => res.json(req.errors))
+  } else {
+    res.status(500).json(req.errors)
+  }
+})
+
+// The following endpoints would be used in admin setting
 // Get single user by id for updating
 router.get('/id/:id', (req, res) => {
   User.findOne({where: {id: req.params.id}})
