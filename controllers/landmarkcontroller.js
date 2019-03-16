@@ -2,13 +2,14 @@ const router = require('express').Router();
 const User = require('../db').import('../models/user');
 const State = require('../db').import('../models/state');
 const Landmark = require('../db').import('../models/landmark');
+const validateSession = require('../middleware/validateSession');
 // Landmark.sync({force:true})
 
 State.belongsTo(User);
 Landmark.belongsTo(State);
 
 // Create Landmark
-router.post('/', (req, res) => {
+router.post('/', validateSession, (req, res) => {
 
   Landmark.create({
     title: req.body.landmark.title,
@@ -21,7 +22,7 @@ router.post('/', (req, res) => {
     imageURL: req.body.landmark.imageURL,
     comments: req.body.landmark.comments,
     stateId: req.body.landmark.stateId,
-    // owner: req.user.id
+    owner: req.user.id
   })
     .then(
       createSuccess = (landmark) => {
@@ -55,7 +56,7 @@ router.get('/', (req, res) => {
 });
 
 // Get all user landmarks
-router.get('/user/', (req, res) => {
+router.get('/user/', validateSession, (req, res) => {
   Landmark.findAll({ 
     include: [
       {
@@ -76,14 +77,14 @@ router.get('/user/', (req, res) => {
 });
 
 // Get single landmark by id for updating
-router.get('/id/:id', (req, res) => {
+router.get('/id/:id', validateSession, (req, res) => {
   Landmark.findOne({where: {id: req.params.id}})
   .then(landmark => res.status(200).json(landmark))
   .catch(err => res.status(500).json(err))
 });
 
 // Update landmark
-router.put('/:id', (req, res) => {
+router.put('/:id', validateSession, (req, res) => {
   if (!req.errors) {
     Landmark.update(req.body.landmark, { where: { id: req.params.id }})
       .then(landmark => res.status(200).json(landmark))
@@ -94,7 +95,7 @@ router.put('/:id', (req, res) => {
 })
 
 // Delete state
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateSession, (req, res) => {
   if (!req.errors) {
     Landmark.destroy({ where: { id: req.params.id }})
       .then(landmark => res.status(200).json(landmark))
