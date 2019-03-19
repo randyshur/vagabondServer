@@ -65,9 +65,39 @@ router.get('/countbystate', (req, res) => {
 
 // USER ENPOINTS - must have valid token to process their own data
 // The following endpoints only allow owner to use
+// Get states for current user
+router.get('/mystates', validateSession, (req, res) => {
+  if (!req.errors) {
+    State.findAll({ where: { user_id: req.user.id } })
+      .then(user => res.status(200).json(user))
+      .catch(err => res.status(500).json(err))
+  } else {
+    res.status(500).json(req.errors)
+  }
+});
+
+// Get state count for current user
+router.get('/mystatecount', validateSession, (req, res) => {
+  State.findAll({
+    attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'numStates']],
+    where: { user_id: req.user.id }
+  })
+    .then(user => res.status(200).json(user))
+    .catch(err => res.status(500).json(err))
+});
+
+//// Search to validate is userid-state combination exists
+router.get('/validate/:state', validateSession, function(req, res) {
+  State.findAll({where: {state: req.params.state, user_id: req.user.id}})
+  .then(state => res.status(200).json(state))
+  .catch(err => res.status(500).json(err))
+});
+
 // Create state for current user
 router.post('/mystate', validateSession, (req, res) => {
+
   if (!req.errors) {
+    
     State.create({
       state: req.body.state,
       dateLastVisited: req.body.dateLastVisited,
@@ -91,17 +121,10 @@ router.post('/mystate', validateSession, (req, res) => {
 
 })
 
-//// Search to validate is userid-state combination exists
-router.get('/validate/:state', validateSession, function(req, res) {
-  State.findAll({where: {state: req.params.state, user_id: req.user.id}})
-  .then(state => res.status(200).json(state))
-  .catch(err => res.status(500).json(err))
-});
-
-// Get states for current user
-router.get('/mystates', validateSession, (req, res) => {
+// Get state by id for updating for current user
+router.get('/mystate/:id', validateSession, (req, res) => {
   if (!req.errors) {
-    State.findAll({ where: { user_id: req.user.id } })
+    State.findOne({ where: { id: req.params.id, user_id: req.user.id} })
       .then(user => res.status(200).json(user))
       .catch(err => res.status(500).json(err))
   } else {
@@ -109,18 +132,8 @@ router.get('/mystates', validateSession, (req, res) => {
   }
 });
 
-// Get state count for current user
-router.get('/mystatecount', validateSession, (req, res) => {
-  State.findAll({
-    attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'numStates']],
-    where: { user_id: req.user.id }
-  })
-    .then(user => res.status(200).json(user))
-    .catch(err => res.status(500).json(err))
-});
-
 // Update state for current user
-router.put('/mystates/:id', validateSession, (req, res) => {
+router.put('/mystate/:id', validateSession, (req, res) => {
   if (!req.errors) {
     State.update(req.body, { where: { id: req.params.id, user_id: req.user.id } })
       .then(user => res.status(200).json(user))
@@ -131,7 +144,8 @@ router.put('/mystates/:id', validateSession, (req, res) => {
 });
 
 // Delete state for current user
-router.delete('/mystates/:id', validateSession, (req, res) => {
+// IMPORTANT! This is a cascaded delete all associated landmarks will be deleted
+router.delete('/mystate/:id', validateSession, (req, res) => {
   if (!req.errors) {
     State.destroy({ where: { id: req.params.id, user_id: req.user.id } })
       .then(user => res.status(200).json(user))
@@ -142,7 +156,6 @@ router.delete('/mystates/:id', validateSession, (req, res) => {
 });
 
 // ADMIN ENDPOINTS - must have token with admin user id
-
 // Get any state by id for updating
 router.get('/admin/:id', validateAdmin, (req, res) => {
   if (!req.errors) {
@@ -166,6 +179,7 @@ router.put('/admin/:id', validateAdmin, (req, res) => {
 });
 
 // Delete any state by id
+// IMPORTANT! This is a cascaded delete all associated landmarks will be deleted
 router.delete('/admin/:id', validateAdmin, (req, res) => {
   if (!req.errors) {
     State.destroy({ where: { id: req.params.id} })
@@ -175,7 +189,5 @@ router.delete('/admin/:id', validateAdmin, (req, res) => {
     res.status(500).json(req.errors)
   }
 });
-
-
 
 module.exports = router;
