@@ -1,42 +1,64 @@
+const Sequelize = require('sequelize');
+const State = require('../db').import('../models/state');
 module.exports = (sequelize, DataTypes) => {
     const Landmark = sequelize.define('landmark', {
+        id: { 
+            type: Sequelize.INTEGER, 
+            primaryKey: true, 
+            autoIncrement: true
+        },
         title: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: false
         },
         address: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true
         },
         city: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true
         },
         zip: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
             allowNull: true
         },
         latitude: {
-            type: DataTypes.DECIMAL,
+            type: Sequelize.DECIMAL,
             allowNull: true
         },
         longitude: {
-            type: DataTypes.DECIMAL,
+            type: Sequelize.DECIMAL,
             allowNull: true
         },
         dateLastVisited: {
-            type: DataTypes.DATE,
+            type: Sequelize.DATE,
+            field: 'date_last_visited',
             allowNull: true
         },
         imageURL: {
-            type: DataTypes.STRING,
+            type: Sequelize.STRING,
+            field: 'image_url',
             allowNull: true
         },
         comments: {
-            type: DataTypes.TEXT,
+            type: Sequelize.TEXT,
             allowNull: true
         },
+        createdAt: {
+            type: Sequelize.DATE, 
+            field: 'created_at'
+        },
+        updatedAt: {
+            type: Sequelize.DATE, 
+            field: 'updated_at'
+        },
     })
+
+    Landmark.belongsTo(State, {foreignKey: {  
+        name: 'stateId',
+        field: 'state_id'
+      }});
 
     return Landmark;
 }
