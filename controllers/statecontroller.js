@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const State = require('../db').import('../models/state');
 
-// Create state for curren tuser
+// Create state for current user
 router.post('/',  (req, res) => {
 
   State.create({
