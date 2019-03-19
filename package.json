@@ -1,28 +1,21 @@
 {
-  "name": "ang-vagabondserver",
+  "name": "ang-vagabondrss",
   "version": "1.0.0",
-  "description": "Server for Vagabond Application",
+  "description": "My vagabond server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/randyshur/vagabondServer.git"
+    "url": "git+https://github.com/randyshur/vagabondRSS.git"
   },
-  "keywords": [
-    "states",
-    "travel",
-    "landmarks"
-  ],
-  "author": "StringSeekers",
+  "author": "Randy Shurzinske",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/randyshur/vagabondServer/issues"
+    "url": "https://github.com/randyshur/vagabondRSS/issues"
   },
-  "homepage": "https://github.com/randyshur/vagabondServer#readme",
+  "homepage": "https://github.com/randyshur/vagabondRSS#readme",
   "dependencies": {
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
